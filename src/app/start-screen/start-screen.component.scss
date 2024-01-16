@@ -1,0 +1,50 @@
+@import "./../mixin.scss";
+
+#start{
+    width: 100vw;
+    max-width: 100%;
+    height: 100vh;
+    max-height: 100%;
+    @include bgImage("./../../assets/img/table.jpg");
+    @include dFlex();
+
+        #ring{
+            position: relative;
+            width: 98%;
+            height: 98%;
+            @include bgImage("./../../assets/img/ringoffire.png",$size:contain);
+        }
+}
+
+#title{
+    position: absolute;
+    width: 70%;
+    height: 70px;
+    inset: 0;
+    top:-60%;
+    margin:auto;
+    @include dFlex();
+        img{
+            width: 100%;
+        }
+};
+
+#play{
+    position: absolute;
+    width: 25%;
+    height: 70px;
+    inset:0;
+    bottom:-40%;
+    margin: auto;
+    @include dFlex();
+        img{
+            width: 100%;
+            filter:contrast(0);
+            &:hover{
+                filter:contrast(1);
+                cursor: pointer;
+            }
+        }
+}
+
+

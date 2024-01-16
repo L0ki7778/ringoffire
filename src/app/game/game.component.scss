@@ -1,0 +1,66 @@
+@import "./../mixin.scss";
+
+#playground{
+    width: 100vw;
+    height: 100vh;
+    max-height: 100%;
+    @include bgImage("./../../assets/img/table.jpg");
+    @include dFlex();
+}
+
+.card-stack{
+    position: relative;
+    img{
+        position: absolute;
+        width: 120px;
+    }
+        .top-card{
+            transition: all 125ms ease-in-out;
+            &:hover{
+                cursor: pointer;
+
+            }
+        }
+}
+
+.pick-card{
+    transition: all 125ms ease-in-out;
+    transform: scale(1.5)!important;
+}
+
+.played-card{
+    right: 25px;
+    bottom: 25px;
+    width: 120px;
+    position: absolute;
+    opacity: 0;
+    transform: translate(226px, -185px) rotate(6deg);
+    animation: appear 20ms ease 1.5s forwards;
+}
+
+@keyframes appear {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+.player-position{
+    position: absolute;
+    left: 0;
+}
+
+.add-btn{
+    position: absolute;
+    right: 40px;
+    bottom: 40px;
+}
+
+.game-info{
+    position: absolute;
+    bottom: 50px;
+    right: 100px;
+    left: 100px;
+}

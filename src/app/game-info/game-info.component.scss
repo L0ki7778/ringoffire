@@ -1,0 +1,28 @@
+@keyframes glow {
+    0% {
+      text-shadow: 0 0 10px red, 0 0 20px orange, 0 0 30px yellow;
+    }
+    50% {
+      text-shadow: 0 0 20px red, 0 0 40px orange, 0 0 60px yellow;
+    }
+    100% {
+      text-shadow: 0 0 10px red, 0 0 20px orange, 0 0 30px yellow;
+    }
+  }
+  
+  mat-card-title{
+        font-family: 'Rubik Burned', sans-serif;
+        font-weight: 800;
+        font-size: 36px;
+        margin-bottom: 16px;
+  }
+
+  mat-card {
+    color: rgb(244, 240, 240);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.4;
+    background-color: transparent;
+    animation: glow 2s infinite alternate; /* adjust the duration and other properties as needed */
+  }
+  

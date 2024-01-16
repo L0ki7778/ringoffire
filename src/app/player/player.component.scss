@@ -1,0 +1,27 @@
+@import "./../mixin.scss";
+
+.player{
+    @include dFlex();
+    width:300px;
+    font-size: 18px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    span{
+        font-size: 32px;
+        margin-left: 16px;
+    }
+    background-color: rgba(50, 50, 50, 0.5);
+    color: white;
+
+    img{
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 100%;
+    }
+}
+
+.player-active{
+    background-color: orange;
+
+}

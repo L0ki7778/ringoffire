@@ -1,0 +1,12 @@
+@mixin dFlex($js:center, $ai:center) {
+    display: flex;
+    justify-content: $js;
+    align-items: $ai;
+}
+
+@mixin bgImage($url, $size:cover) {
+    background-image: url($url);
+    background-size: $size;
+    background-repeat: no-repeat;
+    background-position: center;
+}
