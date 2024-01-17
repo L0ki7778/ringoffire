@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogClose } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { GameInfoComponent } from '../game-info/game-info.component';
+import { SharedDataService } from '../shared-data.service';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class GameComponent {
   game!: Game;
 
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private sharedDataService: SharedDataService) {
   }
 
   ngOnInit(): void {
@@ -45,14 +46,14 @@ export class GameComponent {
       if (typeof poppedCard === 'string') {
         this.currentCard = poppedCard;
         this.game.playedCards.push(poppedCard);
-       this.game.currentPlayer = (this.game.currentPlayer + 1) % this.game.players.length
+        this.game.currentPlayer = (this.game.currentPlayer + 1) % this.game.players.length
       }
     }
 
     setTimeout(() => {
       this.pickCardAnimation = false
       document.getElementsByClassName('flip-card-inner')[0].classList.remove('flip-animation');
-    }, 1500)
+    }, 1600)
   }
 
   newGame() {
@@ -60,10 +61,15 @@ export class GameComponent {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(DialogAddPlayerComponent);
+    const dialogRef = this.dialog.open(DialogAddPlayerComponent,{
+      disableClose:true
+  });
 
-    dialogRef.afterClosed().subscribe((result:string) => {
-      this.game.players.push(result);
+    dialogRef.afterClosed().subscribe((result: string) => {
+      if(result && result.length>0){
+        this.game.players.push(result);
+        this.sharedDataService.updateGame(this.game)
+      }
     });
   }
 }

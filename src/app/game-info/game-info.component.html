@@ -1,4 +1,10 @@
 <mat-card>
-    <mat-card-title>{{title}}</mat-card-title>
-    <mat-card-content>{{description}}</mat-card-content>
+    @if(!this.currentGame){
+      <mat-card-content>{{placeholderPlayers}}</mat-card-content>
+    }@else if(!title){
+      <mat-card-content>{{placeholderCard}}</mat-card-content>
+    }@else {
+      <mat-card-title>{{title}}</mat-card-title>
+      <mat-card-content>{{description}}</mat-card-content>
+    }
   </mat-card>

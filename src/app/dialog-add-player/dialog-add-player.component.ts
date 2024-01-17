@@ -1,8 +1,12 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+
+import { CommonModule } from '@angular/common';
+import { Component, Inject } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MatDialogTitle,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
   MatDialogContent,
   MatDialogActions,
   MatDialogClose
@@ -15,6 +19,7 @@ import { MatInputModule } from '@angular/material/input';
   selector: 'app-dialog-add-player',
   standalone: true,
   imports: [
+    CommonModule,
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
@@ -22,17 +27,41 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     FormsModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './dialog-add-player.component.html',
   styleUrl: './dialog-add-player.component.scss'
 })
 export class DialogAddPlayerComponent {
-  name: string = "";
+  name!: string;
 
-  constructor() { }
+  addPlayerForm = new FormGroup({
+    name: new FormControl("", [Validators.pattern('[a-zA-Z ]+'), Validators.required, Validators.minLength(3)]),
+  });
+
+
+  constructor(
+    private dielogRef: MatDialogRef<DialogAddPlayerComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: string
+  ) { };
+
+
+  onSubmit(): void {
+    if (this.addPlayerForm.valid) {
+      let value = this.addPlayerForm.get("name")?.value
+      if (value && value.length !== 0) {
+        this.name = value
+        this.dielogRef.close(this.name)
+      }
+    }
+  };
+
 
   onNoClick(): void {
+    this.dielogRef.close();
   }
+
 
 }

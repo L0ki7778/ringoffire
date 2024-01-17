@@ -1,10 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { GameComponent } from '../game/game.component';
+import { Game } from '../../models/games';
+import { SharedDataService } from '../shared-data.service';
 
 @Component({
   selector: 'app-game-info',
   standalone: true,
-  imports: [MatCardModule],
+  imports: [MatCardModule, GameComponent],
   templateUrl: './game-info.component.html',
   styleUrl: './game-info.component.scss'
 })
@@ -26,13 +29,22 @@ export class GameInfoComponent {
     { title: "MakeARule", description: "Create a rule, anyone who breaks it drinks." }
   ]
 
+  placeholderPlayers: string = "Please add some players";
+  placeholderCard: string = "Please pick a card";
   title: string = "";
   description: string = "";
+  currentGame!: Game;
   @Input() card: string = "";
 
-  constructor() { }
+  constructor(private sharedDataService: SharedDataService) { }
 
   ngOnInit(): void {
+    this.sharedDataService.currentGame.subscribe(game => {
+      if (game) {
+        this.currentGame = game;
+        console.log(this.currentGame);
+      }
+    })
   }
 
   ngOnChanges(): void {

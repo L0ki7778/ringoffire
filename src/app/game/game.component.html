@@ -14,7 +14,7 @@
     <div class="flip-card">
       <div class="flip-card-inner">
         <div class="flip-card-front">
-          <img (click)="takeCard()" class="top-card" style="right: 10px; bottom: 10px"
+          <img *ngIf="game.players.length>0" (click)="takeCard()" class="top-card" style="right: 10px; bottom: 10px"
             src="/assets/img/cards/card_cover.png" alt="cover">
         </div>
         <div class="flip-card-back">
