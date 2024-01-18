@@ -42,7 +42,6 @@ export class GameInfoComponent {
     this.sharedDataService.currentGame.subscribe(game => {
       if (game) {
         this.currentGame = game;
-        console.log(this.currentGame);
       }
     })
   }

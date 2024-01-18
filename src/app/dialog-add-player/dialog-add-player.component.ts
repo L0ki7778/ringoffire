@@ -60,6 +60,7 @@ export class DialogAddPlayerComponent {
 
 
   onNoClick(): void {
+    this.name="";
     this.dielogRef.close();
   }
 

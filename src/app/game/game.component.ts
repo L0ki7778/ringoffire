@@ -35,7 +35,6 @@ export class GameComponent {
 
   ngOnInit(): void {
     this.newGame();
-    console.log(this.game);
   }
 
   takeCard() {
