@@ -5,14 +5,16 @@
     max-width: 100%;
     height: 100vh;
     max-height: 100%;
-    @include bgImage("./../../assets/img/table.jpg");
+    @include bgImage("/assets/img/ring.jpg");
     @include dFlex();
 
         #ring{
             position: relative;
             width: 98%;
             height: 98%;
-            @include bgImage("./../../assets/img/ringoffire.png",$size:contain);
+            right: 20px;
+            top:10px;
+            // @include bgImage("./../../assets/img/ringoffire.png",$size:contain);
         }
 }
 
