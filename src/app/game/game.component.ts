@@ -8,7 +8,7 @@ import { MatDialog, MatDialogClose } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { GameInfoComponent } from '../game-info/game-info.component';
 import { SharedDataService } from '../shared-data.service';
-import { Firestore, addDoc, collection, collectionData, doc, onSnapshot, } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, doc, onSnapshot, updateDoc, } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
@@ -28,12 +28,11 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./game.component.scss', './flip-card-game.component.scss']
 })
 export class GameComponent {
-  pickCardAnimation: boolean = false
-  currentCard: string = "";
+
   game?: Game;
   games: Array<object> = [];
   firestore: Firestore = inject(Firestore);
-  item$:any;
+  item$: any;
   // items;
 
   // let item = onSnapshot(this.singleGameRef("games", params["id"]), (doc) => {
@@ -41,14 +40,14 @@ export class GameComponent {
   // });
 
 
-  constructor(private route:ActivatedRoute,public dialog: MatDialog, private sharedDataService: SharedDataService) {
-    
-    this.route.params.subscribe((params)=>{
-      console.log(params["id"])
-      let item = onSnapshot(this.singleGameRef("games", params["id"]), (doc) => {
-        console.log("hallo data",doc.data());
-        this.game = doc.data() as Game
+  constructor(private route: ActivatedRoute, public dialog: MatDialog, private sharedDataService: SharedDataService) {
+    this.newGame();
+    this.route.params.subscribe((params) => {
+      let item = onSnapshot(this.singleGameRef("games", params["id"]), (game) => {
+        this.game = game.data() as Game;
+        this.game.id = params["id"];
         this.sharedDataService.updateGame(this.game)
+        console.log(this.game)
       });
     })
   }
@@ -58,24 +57,42 @@ export class GameComponent {
   }
 
 
+  newGame() {
+    this.game = new Game();
+  }
+
+
+  ngDoCheck() {
+    if (this.game && this.game.players.length > 0 && this.game.pickCardAnimation) {
+      this.saveGame(this.game);
+      return this.takeCard()
+    }
+  }
+
+
+  cardAnimation() {
+    if (this.game) {this.game.pickCardAnimation = true;
+      this.takeCard()
+    }
+  }
+
+
   takeCard() {
-    if (!this.pickCardAnimation) {
-      this.pickCardAnimation = true
+    if (this.game) {
+      this.game.pickCardAnimation = false
       document.getElementsByClassName('flip-card-inner')[0].classList.add('flip-animation');
-      if(this.game){
-        const poppedCard = this.game.stack.pop();
-        if (typeof poppedCard === 'string') {
-          this.currentCard = poppedCard;
-          this.game.playedCards.push(poppedCard);
-          this.game.currentPlayer = (this.game.currentPlayer + 1) % this.game.players.length
-        }
+      const poppedCard = this.game.stack.pop();
+      if (typeof poppedCard === 'string') {
+        this.game.currentCard = poppedCard;
+        this.game.playedCards.push(poppedCard);
+        this.game.currentPlayer = (this.game.currentPlayer + 1) % this.game.players.length;
       }
     }
-
-
     setTimeout(() => {
-      this.pickCardAnimation = false
-      document.getElementsByClassName('flip-card-inner')[0].classList.remove('flip-animation');
+      if (this.game) {
+        document.getElementsByClassName('flip-card-inner')[0].classList.remove('flip-animation');
+        this.saveGame(this.game);
+      }
     }, 1600)
   }
 
@@ -98,8 +115,32 @@ export class GameComponent {
     dialogRef.afterClosed().subscribe((result: string) => {
       if (result && result.length > 0 && this.game) {
         this.game.players.push(result);
-        this.sharedDataService.updateGame(this.game)
+        this.sharedDataService.updateGame(this.game);
+        this.saveGame(this.game);
       }
     });
+  };
+
+
+  async saveGame(item: Game) {
+    if (item) {
+      await updateDoc(this.singleGameRef("games", item.id), this.toObject(item))
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+  }
+
+  toObject(game: Game) {
+    return {
+      players: game.players,
+      stack: game.stack,
+      playedCards: game.playedCards,
+      currentPlayer: game.currentPlayer,
+      kindOfCard: game.kindOfCard,
+      id: game.id,
+      pickCardAnimation: game.pickCardAnimation,
+      currentCard: game.currentCard
+    }
   }
 }

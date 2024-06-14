@@ -47,6 +47,7 @@ export class GameInfoComponent {
   }
 
   ngOnChanges(): void {
+    debugger
     if (this.card) {
       let number: number = +this.card.split("_")[1].split(".")[0];
       this.title = this.cardAction[number - 1].title;

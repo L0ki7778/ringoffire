@@ -1,9 +1,12 @@
 export class Game{
-    public currentPlayer: number = 0;
-    public players: string[] =[];
-    public stack: string[] = [];
-    public playedCards: string[] = [];
-    private kindOfCard:string[]=['ace_', 'hearts_', 'diamonds_', 'clubs_'];
+     currentPlayer: number = 0;
+     players: string[] =[];
+     stack: string[] = [];
+     playedCards: string[] = [];
+     kindOfCard:string[]=['ace_', 'hearts_', 'diamonds_', 'clubs_'];
+     id: string = "";
+     pickCardAnimation: boolean = false
+     currentCard: string = "";
     
 
     constructor(){
@@ -14,6 +17,7 @@ export class Game{
         });
         this.shuffleCards();
     };
+    
 
     public shuffleCards(){
         for(let i = this.stack.length-1; i > 0; i--){
@@ -29,7 +33,11 @@ export class Game{
             stack: this.stack,
             playedCards: this.playedCards,
             currentPlayer: this.currentPlayer,
-            kindOfCard: this.kindOfCard
+            kindOfCard: this.kindOfCard,
+            id: this.id,
+            pickCardAnimation: this.pickCardAnimation,
+            currentCard: this.currentCard
+
         }
     }
 }

@@ -1,7 +1,5 @@
 @if(game){<app-player *ngFor="let player of game.players;let i = index" [ngStyle]="{'top.px':130 + (i * 70)}"
-  class="player-position" 
-  [playerActive]="i==game.currentPlayer"
-  [name]="player"></app-player>
+  class="player-position" [playerActive]="i==game.currentPlayer" [name]="player"></app-player>
 
 <div id="playground">
   <div class="card-stack">
@@ -14,21 +12,24 @@
     <div class="flip-card">
       <div class="flip-card-inner">
         <div class="flip-card-front">
-          <img *ngIf="game.players.length>0" (click)="takeCard()" class="top-card" style="right: 10px; bottom: 10px"
+          <img (click)="cardAnimation()" class="top-card" style="right: 10px; bottom: 10px"
             src="assets/img/cards/card_cover.png" alt="cover">
         </div>
         <div class="flip-card-back">
-          @if(currentCard!==""){
-            <img class="top-card" style="right: 10px; bottom: 10px" src="assets/img/cards/{{currentCard}}" alt="cover">
+          @if(game.currentCard!==""){
+          <img class="top-card" style="right: 10px; bottom: 10px" src="assets/img/cards/{{game.currentCard}}"
+            alt="cover">
           }@else {
-            <img class="top-card" style="right: 10px; bottom: 10px" src="assets/img/cards/card_cover.png" alt="cover">a
+          <img class="top-card" style="right: 10px; bottom: 10px" src="assets/img/cards/card_cover.png" alt="cover">a
           }
         </div>
       </div>
     </div>
   </div>
 </div>}
-<app-game-info [card]="currentCard" class="game-info"></app-game-info>
+@if(game && game.currentCard){
+<app-game-info [card]="game.currentCard" class="game-info"></app-game-info>
+}
 
 <button (click)="openDialog()" mat-fab color="primary" class="add-btn">
   <mat-icon>add</mat-icon>

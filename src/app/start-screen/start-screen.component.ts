@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Game } from '../../models/games';
-import { Firestore, addDoc, collection } from '@angular/fire/firestore';
+import { DocumentData, Firestore, addDoc, collection } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-start-screen',
@@ -20,15 +20,18 @@ export class StartScreenComponent {
   async newGame() {
     this.game = new Game();
     await this.addGame(this.game, 'games');
-    this.router.navigateByUrl('/game');
   };
-
 
   
   async addGame(item: Game, colId: string) {
     try {
       let gameData = item.toObject();
-      await addDoc(collection(this.firestore, colId), gameData);
+      const gameInfo = await addDoc(collection(this.firestore, colId),gameData);
+      this.router.navigateByUrl(`/game/${gameInfo["id"]}`)
+      // await addDoc(collection(this.firestore, colId), gameData)
+      // .then((gameInfo:DocumentData)=>{
+      //   this.router.navigateByUrl(`/game/${gameInfo["id"]}`);
+      // });
     } catch (error) {
       console.error(error)
     }
